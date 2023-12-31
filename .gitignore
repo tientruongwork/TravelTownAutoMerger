@@ -1,0 +1,6 @@
+node_modules
+build
+storage/*
+!storage/common/
+
+yarn-error.log

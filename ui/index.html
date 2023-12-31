@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+    async function start() {
+        const [selectedRows, selectedCols] = collectSelected()
+        const appName = getAppName()
+
+        const params = {
+            app: appName,
+            rows: selectedRows,
+            cols: selectedCols
+        }
+        await fetch("http://localhost:5000/start", {
+            method: "POST", body: JSON.stringify(params), headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    }
+
+    async function stop() {
+        const appName = getAppName()
+        const params = {
+            app: appName
+        }
+        await fetch("http://localhost:5000/stop", {
+            method: "POST", body: JSON.stringify(params), headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    }
+
+    async function terminate() {
+        await fetch("http://localhost:5000/terminate", { method: "GET" })
+    }
+
+    const getAppName = () => {
+        const appName = document.querySelector("#app").value
+        return appName
+    }
+
+    const collectSelected = () => {
+        const selectedRows = [];
+        const selectedCols = [];
+
+        // Collect selected rows
+        document.querySelectorAll('input[name="rowCheckbox"]:checked').forEach(checkbox => {
+            selectedRows.push(parseInt(checkbox.value));
+        });
+
+        // Collect selected columns
+        document.querySelectorAll('input[name="colCheckbox"]:checked').forEach(checkbox => {
+            selectedCols.push(parseInt(checkbox.value));
+        });
+
+
+        return [selectedRows, selectedCols]
+    }
+    window.onbeforeunload = () => {
+        terminate()
+    } 
+</script>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100%;
+    }
+
+    .container {
+        text-align: center;
+        margin: 10px;
+        width: 50%;
+        display: flex;
+    }
+
+    button {
+        width: 100%;
+
+        &:nth-child(1) {
+            background-color: #29a057;
+        }
+
+        &:nth-child(2) {
+            background-color: #aa2b2b;
+        }
+
+        color: #fff;
+        padding: 8px 16px;
+        font-size: 24px;
+        border: none;
+        cursor: pointer;
+        margin: 5px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #38aedd;
+    }
+
+    form {
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    label {
+        font-size: 24px;
+        display: block;
+        color: #555;
+        margin-right: 16px;
+        margin-left: 2px;
+
+        &&:nth-child(1) {
+            margin-bottom: 15px;
+        }
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+
+    input[type="checkbox"] {
+        width: 25px;
+        height: 25px;
+        border: 1px solid #3498db;
+        padding: 3px;
+        border-radius: 3px;
+    }
+
+    input[type="checkbox"]:hover {
+        background-color: #f2f2f2;
+    }
+
+    input[type="checkbox"]:checked {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    /* Keep checkboxes in one line */
+    div>div {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Merge Controller</title>
+</head>
+
+<body>
+    <div class="container">
+        <button onclick="start()">Start</button>
+        <button onclick="stop()">Stop</button>
+    </div>
+
+    <form id="checkboxForm">
+        <div>
+            <label for="app">Application name</label>
+            <input type="text" id="app" name="app" value="A1">
+        </div>
+        <div>
+            <H2>Rows:</H2>
+            <div>
+                <input type="checkbox" id="rowCheckbox0" name="rowCheckbox" value="0" checked>
+                <label for="rowCheckbox0">1</label>
+                <input type="checkbox" id="rowCheckbox1" name="rowCheckbox" value="1" checked>
+                <label for="rowCheckbox1">2</label>
+                <input type="checkbox" id="rowCheckbox2" name="rowCheckbox" value="2" checked>
+                <label for="rowCheckbox2">3</label>
+                <input type="checkbox" id="rowCheckbox3" name="rowCheckbox" value="3" checked>
+                <label for="rowCheckbox3">4</label>
+                <input type="checkbox" id="rowCheckbox4" name="rowCheckbox" value="4" checked>
+                <label for="rowCheckbox4">5</label>
+                <input type="checkbox" id="rowCheckbox4" name="rowCheckbox" value="5" checked>
+                <label for="rowCheckbox4">6</label>
+                <input type="checkbox" id="rowCheckbox4" name="rowCheckbox" value="6" checked>
+                <label for="rowCheckbox4">7</label>
+            </div>
+        </div>
+
+        <div>
+            <H2>Columns:</H2>
+            <div>
+                <input type="checkbox" id="colCheckbox0" name="colCheckbox" value="0" checked>
+                <label for="colCheckbox0">1</label>
+                <input type="checkbox" id="colCheckbox1" name="colCheckbox" value="1" checked>
+                <label for="colCheckbox1">2</label>
+                <input type="checkbox" id="colCheckbox2" name="colCheckbox" value="2" checked>
+                <label for="colCheckbox2">3</label>
+                <input type="checkbox" id="colCheckbox3" name="colCheckbox" value="3" checked>
+                <label for="colCheckbox3">4</label>
+                <input type="checkbox" id="colCheckbox4" name="colCheckbox" value="4" checked>
+                <label for="colCheckbox4">5</label>
+                <input type="checkbox" id="colCheckbox5" name="colCheckbox" value="5" checked>
+                <label for="colCheckbox5">6</label>
+                <input type="checkbox" id="colCheckbox6" name="colCheckbox" value="6" checked>
+                <label for="colCheckbox6">7</label>
+                <input type="checkbox" id="colCheckbox7" name="colCheckbox" value="7" checked>
+                <label for="colCheckbox7">8</label>
+                <input type="checkbox" id="colCheckbox8" name="colCheckbox" value="8" checked>
+                <label for="colCheckbox8">9</label>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>
