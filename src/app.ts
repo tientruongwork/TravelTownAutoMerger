@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import { StartAppBody } from './interfaces/IStartApp'
 import { StopAppBody } from './interfaces/IStopApp'
-import { startAppController, stopAppController } from './controller'
+import { startAppController, stopAppController, terminateAppController } from './controller'
 import kill from 'kill-port'
 
 const app: Express = express();
@@ -27,8 +27,10 @@ app.get('/health', (_, res: Response) => {
 })
 
 app.get('/terminate', () => {
-    console.log('terminated')
-    kill(5000)
+    terminateAppController()
+    setTimeout(() => {
+        kill(5000)
+    }, 500)
 })
 
 app.listen(PORT, () => {
